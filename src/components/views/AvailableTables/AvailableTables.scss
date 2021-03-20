@@ -1,13 +1,15 @@
-  
 @import '../../../styles/settings.scss';
 @import '../../../styles/global.scss';
 
 .button_box {
-  justify-content: center;
   display: flex;
+  justify-content: center;
   margin-top: 20px;
 
-  .button {
-    margin: 0 10px;
+  .add_button {
+    margin: 0 5px;
   }
+}
+.available_table {
+  border-bottom: 1px solid black;
 }

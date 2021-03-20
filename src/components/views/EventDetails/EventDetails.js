@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './OrderWaiter.scss';
+import styles from './EventDetails.scss';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,48 +11,45 @@ import Typography from '@material-ui/core/Typography';
 import { NavLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
-const tableContent = [
-  {id: '1', table: '1', order: 'pizza', amount: '2', extras: ['ham, mushrooms'], people:'2', price:'$30'},
+
+const eventContent = [
+  {id: '1', hour: '17:30', people: '2', duration:'2', phone:'123456789', email: 'koala@gmail.com'},
 ];
 
-const OrderWaiter = () => {
+const EventDetails = () => {
   const {id} = useParams();
   return (
     <Paper className={styles.component}>
       <Typography variant="h4" gutterBottom>
-        Order {id} details
+        Event order {id} details
       </Typography>
       <Table>
         <TableHead className={styles.tableHeader}>
           <TableRow>
-            <TableCell className={styles.tableHeadElement} align='center'>Table number</TableCell>
-            <TableCell className={styles.tableHeadElement} align='center'>Order</TableCell>
-            <TableCell className={styles.tableHeadElement} align='center'>Amount</TableCell>
-            <TableCell className={styles.tableHeadElement} align='center'>Extras</TableCell>
-            <TableCell className={styles.tableHeadElement} align='center'>Price</TableCell>
-            <TableCell className={styles.tableHeadElement} align='center'>Guests</TableCell>
+            <TableCell className={styles.tableHeadElement} align='center'>Godzina</TableCell>
+            <TableCell className={styles.tableHeadElement} align='center'>Ilość osób</TableCell>
+            <TableCell className={styles.tableHeadElement} align='center'>Czas</TableCell>
+            <TableCell className={styles.tableHeadElement} align='center'>Telefon kontaktowy</TableCell>
+            <TableCell className={styles.tableHeadElement} align='center'>Email</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {tableContent.map(order => (
-            <TableRow key={order.id}>
+          {eventContent.map(eventOrder => (
+            <TableRow key={eventOrder.id}>
               <TableCell component="th" scope="row" className={styles.dataTable}>
-                {order.table}
+                {eventOrder.hour}
               </TableCell>
               <TableCell className={styles.dataTable}>
-                {order.order}
+                {eventOrder.people}
               </TableCell>
               <TableCell className={styles.dataTable}>
-                {order.amount}
+                {eventOrder.duration}
               </TableCell>
               <TableCell className={styles.dataTable}>
-                {order.extras}
+                {eventOrder.phone}
               </TableCell>
               <TableCell className={styles.dataTable}>
-                {order.price}
-              </TableCell>
-              <TableCell className={styles.dataTable}>
-                {order.people}
+                {eventOrder.email}
               </TableCell>
             </TableRow>
           ))}
@@ -62,11 +59,15 @@ const OrderWaiter = () => {
         <Button
           className={styles.button}
           color="primary"
+          variant="contained">Edytuj booking </Button>
+        <Button
+          className={styles.button}
+          color="primary"
           variant="contained"
-          component={NavLink} to={`${process.env.PUBLIC_URL}/waiter`}>Back</Button>
+          component={NavLink} to={`${process.env.PUBLIC_URL}/tables`}>Powrót</Button>
       </div>
     </Paper>
   );
 };
 
-export default OrderWaiter;
+export default EventDetails;

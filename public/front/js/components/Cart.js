@@ -37,6 +37,7 @@ class Cart{
     });
 
     thisCart.dom.productList.addEventListener('remove', function() {
+      // eslint-disable-next-line no-restricted-globals
       thisCart.remove(event.detail.cartProduct);
     });
 

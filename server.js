@@ -1,4 +1,4 @@
-/* global require, process */
+/* global, require, process */
 const fs = require('fs');
 const path = require('path');
 const jsonServer = require('json-server');
@@ -11,7 +11,7 @@ const middlewares = jsonServer.defaults({
 const port = process.env.PORT || 3131;
 
 server.get(/\/panel.*/, (req,res) =>{
-  if(req.url == '/panel'){
+  if(req.url === '/panel'){
     req.url += '/';
   }
   const filePath = __dirname+req.url.replace('/panel', '/build');

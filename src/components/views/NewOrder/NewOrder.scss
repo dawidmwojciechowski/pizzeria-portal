@@ -1,0 +1,33 @@
+@import '../../../styles/settings.scss';
+@import '../../../styles/global.scss';
+
+.input {
+  width: 200px;
+  margin: 10px;
+}
+
+.login_button{
+  height: 50px;
+}
+.section {
+  align-items: center;
+  margin: 10px 0;
+
+  .input_menu {
+    width: 150px;
+    border: 1px solid red;
+  }
+}
+
+.checkbox {
+  width: 150px;
+}
+
+.sectionMenu {
+  padding: 10px;
+  align-items: center;
+}
+.amount {
+  width: 100px;
+  margin: 0 40px;
+}

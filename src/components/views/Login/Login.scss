@@ -1,5 +1,38 @@
 @import '../../../styles/settings.scss';
+@import '../../../styles/global.scss';
 
 .component {
-  padding: $base-size;
+  height: 100vh;
+}
+
+.login_form {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.input {
+  margin: 0 5px;
+}
+
+.button_box {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+
+  .login_button {
+    width: 100px;
+    margin: 0 5px;
+  }
+}
+
+.home_box {
+  display: flex;
+  justify-content: center;
+  margin-top:50px;
+
+  .home_button {
+    margin: 20px 0;
+    width: 30%;
+  }
 }

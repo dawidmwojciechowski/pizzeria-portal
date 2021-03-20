@@ -1,13 +1,10 @@
-  
 @import '../../../styles/settings.scss';
 @import '../../../styles/global.scss';
 
-.button_box {
-  justify-content: center;
-  display: flex;
+.dataTable {
   margin-top: 20px;
-
-  .button {
-    margin: 0 10px;
-  }
+}
+.tablerow{
+  border: 1px solid red;
+  color: white;
 }
