@@ -1,48 +1,118 @@
 import React from 'react';
-import styles from './Login.scss';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import { NavLink } from 'react-router-dom';
+import {
+  Button,
+  TextField,
+  Grid,
+  Paper,
+  Typography,
+  Link,
+} from '@material-ui/core';
+import PropTypes from 'prop-types';
+import styles from './Login.module.scss';
+
 
 class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { username: '', password:'', authflag:1 };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  static propTypes = {
+    history: PropTypes.node,
+  }
+
+  handleChange(event) {
+    this.setState({ username: event.state.username, password: event.state.password });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.history.push('/panel');
+  }
+  
   render() {
     return (
-      <Paper className={styles.component}>
-        <form className={styles.login_form}>
-          <TextField
-            id="outlined-basic"
-            label="Login"
-            variant="outlined"
-            className={styles.input}
-          />
-          <TextField
-            id="standard-password-input"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            variant="outlined"
-            className={styles.input}
-          />
-        </form>
-        <div className={styles.button_box}>
-          <Button
-            className={styles.login_button}
-            color="primary"
-            variant="contained">Sign In </Button>
-          <Button
-            className={styles.login_button}
-            color="primary"
-            variant="contained">Register </Button>
-        </div>
-        <div className={styles.home_box}>
-          <Button
-            className={styles.home_button}
-            color="primary"
-            variant="contained"
-            component={NavLink} to={`${process.env.PUBLIC_URL}/`}>Back to Homepage </Button>
-        </div>
-      </Paper>
+      <div>
+        <Grid container spacing={0} justify="center" direction="row">
+          <Grid item>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              spacing={2}
+              className={styles.loginForm}
+            >
+              <Paper
+                variant="elevation"
+                elevation={2}
+                className={styles.loginBackground}
+              >
+                <Grid item>
+                  <Typography component="h1" variant="h5">
+Sign in
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <form onSubmit={this.handleSubmit}>
+                    <Grid container direction="column" spacing={2}>
+                      <Grid item>
+                        <TextField
+                          type="email"
+                          placeholder="Email"
+                          fullWidth
+                          name="username"
+                          variant="outlined"
+                          value={this.state.username}
+                          onChange={(event) =>
+                            this.setState({
+                              [event.target.name]: event.target.value,
+                            })
+                          }
+                          required
+                          autoFocus
+                        />
+                      </Grid>
+                      <Grid item>
+                        <TextField
+                          type="password"
+                          placeholder="Password"
+                          fullWidth
+                          name="password"
+                          variant="outlined"
+                          value={this.state.password}
+                          onChange={(event) =>
+                            this.setState({
+                              [event.target.name]: event.target.value,
+                            })
+                          }
+                          required
+                        />
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          type="submit"
+                          className={styles.buttonBlock}
+                        >
+Submit
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </form>
+                </Grid>
+                <Grid item>
+                  <Link href="#" variant="body2">
+Forgot Password?
+                  </Link>
+                </Grid>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Grid>
+      </div>
     );
   }
 }

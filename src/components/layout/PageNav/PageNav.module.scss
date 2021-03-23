@@ -1,0 +1,11 @@
+.component {
+    margin-left: auto;
+}
+
+.link {
+    color:white;
+    &:nth-child(1){
+        position: absolute;
+        left: 0;
+    }
+}

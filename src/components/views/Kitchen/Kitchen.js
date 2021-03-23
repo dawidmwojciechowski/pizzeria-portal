@@ -1,77 +1,162 @@
-import React from 'react';
-import styles from './Kitchen.scss';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
-import { NavLink } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import SwitchChanger from '../../features/Switch/Switch';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchFromAPI } from '../../../redux/kitchenRedux';
 
-const kitchenOrders = [
-  {id: '1', type: 'take away', products: 'pizza, cola', table:'-', order: '123'},
-  {id: '2', type: 'stay in', products: '2x fries, 2x latte', table:'1', order: '124'},
-  {id: '3', type: 'take away', products: 'salad, fries, cake, water', table:'-', order: '125'},
-  {id: '4', type: 'stay in', products: '3x cake, 3x black coffee', table:'3', order: '126'},
-  {id: '5', type: 'stay in', products: 'pizza', table:'2', order: '127'},
+
+const useRowStyles = makeStyles({
+  root: {
+    '& > *': {
+      borderBottom: 'unset',
+    },
+  },
+});
+
+function createData(dish, orderNumber, clientType, status, price) {
+  return {
+    dish,
+    orderNumber,
+    clientType,
+    status,
+    price,
+    history: [
+      { date: '2020-01-05', customerId: '11091700', amount: 1 },
+    ],
+  };
+}
+
+function Row(props) {
+  const { row } = props;
+  const [open, setOpen] = React.useState(false);
+  const classes = useRowStyles();
+
+  const dispatch = useDispatch();
+  const dishes = useSelector(state => state.dishes.data);
+
+  if(dishes) {
+    console.log(dishes);
+  }
+
+  useEffect(() => {
+    dispatch(fetchFromAPI());
+  }, [dispatch]);
+
+  return (
+    <React.Fragment>
+      <TableRow className={classes.root}>
+        <TableCell>
+          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {row.dish}
+        </TableCell>
+        <TableCell align="right">{row.orderNumber}</TableCell>
+        <TableCell align="right">{row.clientType}</TableCell>
+        <TableCell align="right">{row.status}</TableCell>
+        <TableCell align="right">{row.price}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={1}>
+              <Typography variant="h6" gutterBottom component="div">
+                History
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Customer</TableCell>
+                    <TableCell align="right">Amount</TableCell>
+                    <TableCell align="right">Total price ($)</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {row.history.map((historyRow) => (
+                    <TableRow key={historyRow.date}>
+                      <TableCell component="th" scope="row">
+                        {historyRow.date}
+                      </TableCell>
+                      <TableCell>{historyRow.customerId}</TableCell>
+                      <TableCell align="right">{historyRow.amount}</TableCell>
+                      <TableCell align="right">
+                        {Math.round(historyRow.amount * row.price * 100) / 100}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
+}
+
+Row.propTypes = {
+  row: PropTypes.shape({
+    dish: PropTypes.string.isRequired,
+    orderNumber: PropTypes.number.isRequired,
+    clientType: PropTypes.string.isRequired,
+    history: PropTypes.arrayOf(
+      PropTypes.shape({
+        amount: PropTypes.number.isRequired,
+        customerId: PropTypes.string.isRequired,
+        date: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
+    price: PropTypes.number.isRequired,
+    status: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+const rows = [
+  createData('Pizza 1', 159, 'IN', <SwitchChanger/>, 3.99),
+  createData('Pizza 1', 159, 'IN', <SwitchChanger/>, 3.99),
+  createData('Pizza 1', 159, 'IN', <SwitchChanger/>, 3.99),
+  createData('Pizza 1', 159, 'IN', <SwitchChanger/>, 3.99),
+  createData('Pizza 1', 159, 'IN', <SwitchChanger/>, 3.99),
 ];
 
-const Kitchen = () => {
+
+export default function CollapsibleTable() {
   return (
-    <Paper className={styles.component}>
-      <Typography variant="h4" gutterBottom>
-        Zamówienia
-      </Typography>
-      <Table>
-        <TableHead className={styles.tableHeader}>
+    <TableContainer component={Paper}>
+      <Table aria-label="collapsible table">
+        <TableHead>
           <TableRow>
-            <TableCell className={styles.tableHeadElement} align='center'>Typ zamówienia</TableCell>
-            <TableCell className={styles.tableHeadElement} align='center'>Produkty</TableCell>
-            <TableCell className={styles.tableHeadElement} align='center'>Numer stolika</TableCell>
-            <TableCell className={styles.tableHeadElement} align='center'>Numer zamówienia</TableCell>
-            <TableCell className={styles.tableHeadElement} align='center'>Oznacz jako zrobione</TableCell>
+            <TableCell />
+            <TableCell>Dish</TableCell>
+            <TableCell align="right">Order number</TableCell>
+            <TableCell align="right">Client type(In/Out)</TableCell>
+            <TableCell align="right">Status</TableCell>
+            <TableCell align="right">Price</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {kitchenOrders.map(kitchenOrder => (
-            <TableRow key={kitchenOrder.id}>
-              <TableCell component="th" scope="row" align='center' className={styles.dataTable}>
-                {kitchenOrder.type}
-              </TableCell>
-              <TableCell align='center' className={styles.dataTable}>
-                {kitchenOrder.products}
-              </TableCell>
-              <TableCell align='center' className={styles.dataTable}>
-                {kitchenOrder.table}
-              </TableCell>
-              <TableCell align='center' className={styles.dataTable}>
-                {kitchenOrder.order && (
-                  <Button component={NavLink} variant="outlined" color="primary" to={`${process.env.PUBLIC_URL}/waiter/order/${kitchenOrder.order}`}>
-                    {kitchenOrder.order}
-                  </Button>
-                )}
-              </TableCell>
-              <TableCell align='center' className={styles.dataTable}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="checkedB"
-                      color="primary"
-                    />
-                  }
-                  label="Zrobione"
-                />
-              </TableCell>
-            </TableRow>
+          {rows.map((row) => (
+            <Row key={row.name} row={row} />
           ))}
         </TableBody>
       </Table>
-    </Paper>
+    </TableContainer>
   );
-};
-
-export default Kitchen;
+}

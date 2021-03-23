@@ -1,0 +1,26 @@
+@import '../../../styles/settings.scss';
+
+.component {
+    margin-top: 20px;
+
+    .datepicker {
+        text-align: end;
+        margin: 0 0 5px 0;
+
+        input {
+            height: 40px;
+        }
+    }
+
+    .hour, .table {
+        font-size: 18px;
+    }
+
+    .link {
+        text-decoration: none;
+    }
+}
+
+span {
+    font-size: 15px;
+}

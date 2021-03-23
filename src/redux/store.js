@@ -1,35 +1,42 @@
-import {combineReducers, createStore} from 'redux';
-import tripList from '../data/trips.json';
-import orderReducer from './orderRedux';
-import globalReducer from './globalRedux';
-import filtersReducer from './filtersRedux';
+import {combineReducers, createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+import tablesReducer from './tablesRedux';
+import bookingReducer from './bookingRedux';
+import dishesReducer from './kitchenRedux';
 
 // define initial state and shallow-merge initial data
 const initialState = {
-  trips: tripList,
-  countries: {},
-  regions: {},
-  subregions: {},
-  tags: {},
-  filters: {
-    searchPhrase: '',
-    tags: [],
-    duration: {
-      from: 1,
-      to: 14,
+  tables: {
+    data: {},
+    loading: {
+      active: false,
+      error: false,
     },
   },
-  order: {
-    trip: null,
-    email: '',
-    options: {},
+  bookings: {
+    data: {},
+    loading: {
+      active: false,
+      error: false,
+    },
+  },
+
+  dishes: {
+    data: {},
+    loading: {
+      active: false,
+      error: false,
+    },
   },
 };
 
 // define reducers
 const reducers = {
-  filters: filtersReducer,
-  order: orderReducer,
+  tables: tablesReducer,
+  bookings: bookingReducer,
+  dishes: dishesReducer,
 };
 
 // add blank reducers for initial state properties without reducers
@@ -39,20 +46,15 @@ Object.keys(initialState).forEach(item => {
   }
 });
 
-// combine reducers
 const combinedReducers = combineReducers(reducers);
-
-// merge all reducers with globalReducer
-const storeReducer = (state, action) => {
-  const modifiedState = globalReducer(state, action);
-  return combinedReducers(modifiedState, action);
-};
 
 // create store
 const store = createStore(
-  storeReducer,
+  combinedReducers,
   initialState,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  composeWithDevTools(
+    applyMiddleware(thunk)
+  )
 );
 
 export default store;
